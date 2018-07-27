@@ -1,0 +1,24 @@
+# Default values for example app for prometheus.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+
+replicaCount: 1
+restartPolicy: Never
+
+image:
+  repository: quay.io/brancz/prometheus-example-app
+  tag: v0.1.0
+  pullPolicy: IfNotPresent
+
+service:
+  annotations: {}
+  clusterIP: ""
+  externalIPs: []
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  type: ClusterIP
+  port: 8888
+  nodePort: ""
+
+podAnnotations: {}
+
