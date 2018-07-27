@@ -1,0 +1,24 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: example-app
+    chart: "example-app-0.1.0"
+    component: example-app
+    heritage: "Tiller"
+    release: "all-health"
+    prometheus: "all-health"
+  name: prometheus-demo-example-app
+spec:
+  jobLabel: app
+  selector:
+    matchLabels:
+      app: example-app
+      chart: example-app-0.1.0
+  namespaceSelector:
+    matchNames:
+      - "example"
+  endpoints:
+  - port: http
+    interval: 30s
+
