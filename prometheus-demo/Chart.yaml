@@ -1,0 +1,9 @@
+apiVersion: v1
+name: prometheus-demo
+description: Manifests, and dashboards for prometheus monitoring demo.
+maintainers:
+  - name: atoato88
+    email: atoato88+github@gmail.com
+sources:
+  - https://github.com/coreos/prometheus-operator
+version: 0.1.0
