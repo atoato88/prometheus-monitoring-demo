@@ -6,8 +6,8 @@ metadata:
     chart: "example-app-0.1.0"
     component: example-app
     heritage: "Tiller"
-    release: "all-health"
-    prometheus: "all-health"
+    release: "example-prometheus"
+    prometheus: "example-prometheus"
   name: prometheus-demo-example-app
 spec:
   jobLabel: app
