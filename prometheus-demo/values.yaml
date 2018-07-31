@@ -417,6 +417,10 @@ prometheus:
   # - name: sidecar
   #   image: registry/name:tag
 
+grafana:
+  serverDashboardConfigmaps:
+    - example-app-dashboard
+
 # default rules are in templates/general.rules.yaml
 # prometheusRules: {}
 
