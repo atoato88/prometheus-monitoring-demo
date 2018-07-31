@@ -2,12 +2,12 @@
 
 This repo include demonstration assets which prometheus monitors example application.
 
-# Cloud Native Days 2018 Tokyo デモシナリオ
+# Cloud Native Days Tokyo 2018 Demo
 
 ## 環境準備
 -   gke
     -   gke で 1.9.7-gke.3 クラスタを作成する。
-        -   もしくは　gcloud コマンドでデプロイする。コマンドは要確認。
+        -   もしくは　gcloud コマンドでデプロイする。
     -   download `gcloud` command and extract it.
     -   ```
         cd google-cloud-sdk/
@@ -79,13 +79,12 @@ This repo include demonstration assets which prometheus monitors example applica
 ## Deploy example app
 ```
 git clone https://github.com/atoato88/prometheus-monitoring-demo.git
-cd prometheus-monitoring-demo/example-app
+cd prometheus-monitoring-demo
 
-helm install --name example-app --namespace example .
-
-helm upgrade example-app . --set replicaCount=2
+helm install --name example-app --namespace example example-app/.
 ```
 
+### for cleanup
 ```
 helm delete --purge example-app
 ```
@@ -98,9 +97,13 @@ echo ${SVC}
 
 kubectl -n example run term --image alpine -it
 
+# if already running pod. 
+kubectl -n example attach -it $(kubectl -n example get pod -o custom-columns=NAME:.metadata.name --no-headers -l run=term)
+
 export HOST=10.11.243.251; export PORT=8888; while : ; do if [[ $((${RANDOM} % 4)) = 0 ]]; then wget http://${HOST}:${PORT}/err -O - ; else wget http://${HOST}:${PORT} -O -; fi; sleep 1; done
 ```
 
+### for cleanup
 ```
 kubectl -n example delete deployments term
 kubectl -n example delete pods $(kubectl -n example get pods -l run=term -o custom-columns=NAME:.metadata.name --no-headers)
@@ -109,9 +112,8 @@ kubectl -n example delete pods $(kubectl -n example get pods -l run=term -o cust
 
 ## Deploy prometheus
 ```
-cd prometheus-demo
 helm dependency build .
-helm install --name example-prometheus --namespace example .
+helm install --name example-prometheus --namespace example prometheus-demo/.
 
 kubectl -n example create -f servicemonitor-manual.yaml
 kubectl -n example create -f configmap-example-app-dashboard.yaml
@@ -123,8 +125,20 @@ kubectl -n example port-forward $(kubectl -n example get pods -l app=example-pro
 open -a "/Applications/Google Chrome.app" 'http://localhost:8004/'
 ```
 
+### for cleanup
 ```
 helm delete --purge example-prometheus
 kubectl -n example delete -f configmap-example-app-dashboard.yaml
 kubectl -n example delete -f servicemonitor-manual.yaml
+
+export PVC=$(kubectl -n example get pvc -o custom-columns=NAME:.metadata.name --no-headers)
+expotr PV=$(kubectl -n example get pvc -o custom-columns=PV:.spec.volumeName --no-headers)
+kubectl -n example delete pvc ${PVC}
+kubectl -n example delete pv ${PV}
 ```
+
+## Scale-out exampe app
+```
+helm upgrade example-app example-app/. --set replicaCount=5
+```
+
