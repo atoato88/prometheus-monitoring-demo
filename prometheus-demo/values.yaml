@@ -403,15 +403,15 @@ prometheus:
   ## Prometheus StorageSpec for persistent data
   ## Ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/user-guides/storage.md
   ##
-  storageSpec: {}
-  #  volumeClaimTemplate:
-  #    spec:
-  #      storageClassName: gluster
-  #      accessModes: ["ReadWriteOnce"]
-  #      resources:
-  #        requests:
-  #          storage: 50Gi
-  #    selector: {}
+  storageSpec:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: standard
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 50Gi
+      selector: {}
 
   sidecarsSpec: []
   # - name: sidecar
