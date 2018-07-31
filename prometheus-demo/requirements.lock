@@ -1,0 +1,12 @@
+dependencies:
+- name: alertmanager
+  repository: https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/
+  version: 0.1.6
+- name: prometheus
+  repository: https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/
+  version: 0.0.50
+- name: grafana
+  repository: https://s3-eu-west-1.amazonaws.com/coreos-charts/stable/
+  version: 0.0.36
+digest: sha256:c13e045b16386dd2635deb21250e4296c9004772cd1b229e2c3cc74bb9d1f481
+generated: 2018-07-27T15:48:36.020960831+09:00
