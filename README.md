@@ -116,7 +116,7 @@ kubectl -n example get endpoints -l app=example-app
     wget http://${HOST}:${PORT}/err -O -
 
     # check /metrics
-    wget http://${HOST}:${PORT}/metrics -O - | grep -v "#"
+    wget http://${HOST}:${PORT}/metrics -q -O - | grep -v "#"
 
     # start loop access
     while : ; do if [[ $((${RANDOM} % 4)) = 0 ]]; then wget http://${HOST}:${PORT}/err -O - ; else wget http://${HOST}:${PORT} -O -; fi; sleep 1; done
