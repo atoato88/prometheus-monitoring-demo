@@ -128,7 +128,7 @@ kubectl -n example get endpoints -l app=example-app
     helm dependency build .
     helm install --name example-prometheus --namespace example prometheus-demo/.
 
-    kubectl -n example create -f servicemonitor-manual.yaml
+    kubectl -n example create -f servicemonitor-example-app.yaml
     kubectl -n example create -f configmap-example-app-dashboard.yaml
     
     kubectl -n example get pods
@@ -156,7 +156,7 @@ kubectl -n example get endpoints -l app=example-app
 ```
 helm delete --purge example-prometheus
 kubectl -n example delete -f configmap-example-app-dashboard.yaml
-kubectl -n example delete -f servicemonitor-manual.yaml
+kubectl -n example delete -f servicemonitor-example-app.yaml
 
 export PVC=$(kubectl -n example get pvc -o custom-columns=NAME:.metadata.name --no-headers)
 expotr PV=$(kubectl -n example get pvc -o custom-columns=PV:.spec.volumeName --no-headers)
