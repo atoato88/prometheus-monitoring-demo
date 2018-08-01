@@ -2,7 +2,7 @@
 
 This repo include demonstration assets which monitors example application by prometheus.
 
-# Cloud Native Days Tokyo 2018 Demo Scenario
+# [OpenStack Days Tokyo 2018 / Cloud Native Days Tokyo 2018](http://openstackdays.com/) Demo Scenario
 
 ## 環境準備
 -   GKE
@@ -80,7 +80,7 @@ This repo include demonstration assets which monitors example application by pro
     kubectl -n monitoring port-forward $(kubectl -n monitoring get pods -l app=kube-prometheus-grafana -o=custom-columns=NAME:.metadata.name --no-headers) 8002:3000 &
     open -a "/Applications/Google Chrome.app" 'http://localhost:8002/'
     ```
--   Show "Nodes" or "Kubernetes Capacity Planning" or "Kubernetes Cluster Health" in Grafana dashboard.
+-   Look "Nodes" or "Kubernetes Capacity Planning" or "Kubernetes Cluster Health" in Grafana dashboard.
 
 
 ## Deploy example app
@@ -89,6 +89,9 @@ git clone https://github.com/atoato88/prometheus-monitoring-demo.git
 cd prometheus-monitoring-demo
 
 helm install --name example-app --namespace example example-app/.
+
+kubectl -n example get pods
+kubectl -n example get services
 ```
 
 ## Test access from worker pod
@@ -106,7 +109,7 @@ helm install --name example-app --namespace example example-app/.
     export HOST=10.11.243.251; export PORT=8888
 
     # check 200 page
-    wget http://${HOST}:${PORT}/metrics -O -
+    wget http://${HOST}:${PORT}/ -O -
 
     # check 404 page
     wget http://${HOST}:${PORT}/err -O -
@@ -126,6 +129,9 @@ helm install --name example-app --namespace example example-app/.
 
     kubectl -n example create -f servicemonitor-manual.yaml
     kubectl -n example create -f configmap-example-app-dashboard.yaml
+    
+    kubectl -n example get pods
+    kubectl -n example get services
 
     kubectl -n example port-forward $(kubectl -n example get pods -l app=prometheus -o custom-columns=NAME:.metadata.name --no-headers) 8003:9090 &
     open -a "/Applications/Google Chrome.app" 'http://localhost:8003/'
@@ -133,13 +139,14 @@ helm install --name example-app --namespace example example-app/.
     kubectl -n example port-forward $(kubectl -n example get pods -l app=example-prometheus-grafana -o=custom-columns=NAME:.metadata.name --no-headers) 8004:3000 &
     open -a "/Applications/Google Chrome.app" 'http://localhost:8004/'
     ```
+-   Look "Example App" in Grafana dashboard.
 
 ## Scale-out example app
-```
-helm upgrade example-app example-app/. --set replicaCount=5
-```
+-   ```
+    helm upgrade example-app example-app/. --set replicaCount=5
+    ```
+-   Watch for increasing instance.
 
-## 
 
 ## Cleanup
 
