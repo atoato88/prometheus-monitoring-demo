@@ -159,7 +159,7 @@ kubectl -n example delete -f configmap-example-app-dashboard.yaml
 kubectl -n example delete -f servicemonitor-example-app.yaml
 
 export PVC=$(kubectl -n example get pvc -o custom-columns=NAME:.metadata.name --no-headers)
-expotr PV=$(kubectl -n example get pvc -o custom-columns=PV:.spec.volumeName --no-headers)
+export PV=$(kubectl -n example get pvc -o custom-columns=PV:.spec.volumeName --no-headers)
 kubectl -n example delete pvc ${PVC}
 kubectl -n example delete pv ${PV}
 ```
