@@ -90,8 +90,9 @@ cd prometheus-monitoring-demo
 
 helm install --name example-app --namespace example example-app/.
 
-kubectl -n example get pods
-kubectl -n example get services
+kubectl -n example get pods -l app=example-app
+kubectl -n example get services -l app=example-app
+kubectl -n example get endpoints -l app=example-app
 ```
 
 ## Test access from worker pod
@@ -106,7 +107,7 @@ kubectl -n example get services
     kubectl -n example attach -it $(kubectl -n example get pod -o custom-columns=NAME:.metadata.name --no-headers -l run=term)
 
     # set env
-    export HOST=10.11.243.251; export PORT=8888
+    export PORT=8888; export HOST=10.11.243.251
 
     # check 200 page
     wget http://${HOST}:${PORT}/ -O -
@@ -115,10 +116,10 @@ kubectl -n example get services
     wget http://${HOST}:${PORT}/err -O -
 
     # check /metrics
-    wget http://${HOST}:${PORT}/metrics -O -
+    wget http://${HOST}:${PORT}/metrics -O - | grep -v "#"
 
     # start loop access
-    export HOST=10.11.243.251; export PORT=8888; while : ; do if [[ $((${RANDOM} % 4)) = 0 ]]; then wget http://${HOST}:${PORT}/err -O - ; else wget http://${HOST}:${PORT} -O -; fi; sleep 1; done
+    while : ; do if [[ $((${RANDOM} % 4)) = 0 ]]; then wget http://${HOST}:${PORT}/err -O - ; else wget http://${HOST}:${PORT} -O -; fi; sleep 1; done
     ```
 
 ## Deploy Prometheus and Grafana for example app
@@ -144,6 +145,7 @@ kubectl -n example get services
 ## Scale-out example app
 -   ```
     helm upgrade example-app example-app/. --set replicaCount=5
+    kubectl -n example get pods -l app=example-app -w
     ```
 -   Watch for increasing instance.
 
@@ -165,6 +167,13 @@ kubectl -n example delete pv ${PV}
 ### Cleanup for Deploy example app
 ```
 helm delete --purge example-app
+```
+
+### Cleanup kubectl port-forward
+```
+ps -ef | grep 800 | grep kubectl
+ps -ef | grep 800 | grep kubectl | awk '{print $2}' | xargs -I {} kill {}
+ps -ef | grep 800 | grep kubectl
 ```
 
 ### Cleanup for Test access from Pod
