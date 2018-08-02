@@ -134,6 +134,9 @@ kubectl -n example get endpoints -l app=example-app
     kubectl -n example get pods
     kubectl -n example get services
 
+    kubectl -n example get prometheus
+    kubectl -n example get servicemonitor
+
     kubectl -n example port-forward $(kubectl -n example get pods -l app=prometheus -o custom-columns=NAME:.metadata.name --no-headers) 8003:9090 &
     open -a "/Applications/Google Chrome.app" 'http://localhost:8003/'
 
